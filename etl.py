@@ -101,7 +101,7 @@ def process_log_data(spark, input_data, output_data):
         col('gender'),
         col('level'),
         col('userId')
-    ).distinct(["userId"])
+    ).dropDuplicates(["userId"])
 
     # write users table to parquet files
     user_table.write.parquet("{output_data}users/users_table.parquet".format(
@@ -170,7 +170,7 @@ def process_log_data(spark, input_data, output_data):
 def main():
     # instantiate spark session
     spark = create_spark_session()
-    # refeference the root s3 bucket
+    # reference the root s3 bucket
     input_data = "s3a://udacity-dend/"
     # specify S3 bucket to save output
     output_data = ""
