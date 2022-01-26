@@ -55,7 +55,7 @@ def process_song_data(spark, input_data, output_data):
         col('artist_id'),
         col('year'),
         col('duration')
-    ).distinct()
+    ).dropDuplicates(["song_id"])
 
     # write songs table to parquet files partitioned by year and artist
     songs_table.write.partitionBy('year', 'artist_id') \
@@ -69,7 +69,7 @@ def process_song_data(spark, input_data, output_data):
         col('artist_location'),
         col('artist_latitude'),
         col('artist_longitude')
-    ).distinct()
+    ).dropDuplicates(["artist_id"])
 
     # write artists table to parquet files
     artists_table.write.parquet("{output_data}artists/artists_table.parquet".format(
@@ -101,7 +101,7 @@ def process_log_data(spark, input_data, output_data):
         col('gender'),
         col('level'),
         col('userId')
-    ).distinct()
+    ).distinct(["userId"])
 
     # write users table to parquet files
     user_table.write.parquet("{output_data}users/users_table.parquet".format(
